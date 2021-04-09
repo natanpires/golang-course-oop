@@ -6,6 +6,14 @@ import (
 	c "go-oop/contas"
 )
 
+func PagarBoleto(conta verificarConta, valor float64) (string, float64) {
+	return conta.Sacar(valor)
+}
+
+type verificarConta interface {
+	Sacar(valor float64) (string, float64)
+}
+
 func main() {
 	// var conta *ContaCorrente
 	// conta = new(ContaCorrente)
@@ -38,11 +46,28 @@ func main() {
 		NumeroConta:   502,
 	}
 
+	clienteDenis := clientes.Titular{
+		Nome:      "Denis",
+		CPF:       "123.123.100.23",
+		Profissao: "Atendente",
+	}
+
+	contaP := c.ContaPoupanca{
+		Titular:       clienteDenis,
+		NumeroAgencia: 1002,
+		NumeroConta:   1034,
+	}
+
+	fmt.Println(contaP.Saldo(), conta.Saldo(), contaT.Saldo())
+	contaP.Depositar(500)
 	conta.Depositar(1000)
 	contaT.Depositar(900)
+
+	fmt.Println(contaP.Saldo(), conta.Saldo(), contaT.Saldo())
 	conta.Sacar(500)
 	conta.Depositar(120)
 	conta.Transferir(100, &contaT)
 
-	fmt.Println(conta.Saldo(), contaT.Saldo())
+	PagarBoleto(&contaP, 60.)
+	fmt.Println(contaP.Saldo(), conta.Saldo(), contaT.Saldo())
 }
